@@ -1,16 +1,24 @@
 import streamlit as st
 import pandas as pd
+import requests
 
-
-GOOGLE_CSV_URL = "https://drive.google.com/file/d/1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK/view?usp=sharing"
+# Google Drive file ID
+FILE_ID = "1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK"
 
 def main():
     st.title("CSV Explorer")
 
-
     @st.cache_data  # This decorator caches the data to improve performance
     def load_data():
-        return pd.read_csv(GOOGLE_CSV_URL)
+        # Construct the direct download URL
+        download_url = f"https://drive.google.com/uc?id={FILE_ID}"
+        
+        # Use requests to get the content
+        response = requests.get(download_url)
+        response.raise_for_status()  # Raise an exception for bad responses
+        
+        # Read the CSV content
+        return pd.read_csv(pd.compat.StringIO(response.text))
 
     try:
         df = load_data()
