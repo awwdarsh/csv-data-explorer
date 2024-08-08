@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
+from io import StringIO
 
 # Google Drive file ID
 FILE_ID = "1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK"
@@ -18,7 +19,7 @@ def main():
         response.raise_for_status()  # Raise an exception for bad responses
         
         # Read the CSV content
-        return pd.read_csv(pd.compat.StringIO(response.text))
+        return pd.read_csv(StringIO(response.text))
 
     try:
         df = load_data()
