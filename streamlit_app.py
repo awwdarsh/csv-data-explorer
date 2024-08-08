@@ -1,22 +1,22 @@
 import streamlit as st
 import pandas as pd
 
-# GitHub raw content URL
-GITHUB_CSV_URL = "https://drive.google.com/file/d/1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK/view?usp=sharing"
+
+GOOGLE_CSV_URL = "https://drive.google.com/file/d/1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK/view?usp=sharing"
 
 def main():
     st.title("CSV Explorer")
 
-    # Load data from GitHub
+
     @st.cache_data  # This decorator caches the data to improve performance
     def load_data():
-        return pd.read_csv(GITHUB_CSV_URL)
+        return pd.read_csv(GOOGLE_CSV_URL)
 
     try:
         df = load_data()
-        st.success("Data loaded successfully from GitHub!")
+        st.success("Data loaded successfully from Google Drive!")
     except Exception as e:
-        st.error(f"Error loading data from GitHub: {e}")
+        st.error(f"Error loading data from Google Drive: {e}")
         st.stop()
 
     # Display basic information about the dataset
