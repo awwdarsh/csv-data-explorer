@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 # GitHub raw content URL
-GITHUB_CSV_URL = "https://raw.githubusercontent.com/your-username/your-repo/main/your-file.csv"
+GITHUB_CSV_URL = "https://drive.google.com/file/d/1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK/view?usp=sharing"
 
 def main():
     st.title("CSV Explorer")
