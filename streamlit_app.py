@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
-from io import StringIO
+import io
 
 # Google Drive file ID
 FILE_ID = "1Hu-NQvSLTeWQbYSHKj5UCzMX27rT3zZK"
@@ -11,15 +11,27 @@ def main():
 
     @st.cache_data  # This decorator caches the data to improve performance
     def load_data():
-        # Construct the direct download URL
-        download_url = f"https://drive.google.com/uc?id={FILE_ID}"
+        # Construct the download URL
+        download_url = f"https://drive.google.com/uc?id={FILE_ID}&export=download"
         
-        # Use requests to get the content
-        response = requests.get(download_url)
-        response.raise_for_status()  # Raise an exception for bad responses
+        # Start a session to handle cookies
+        session = requests.Session()
+        
+        # Get the initial response
+        response = session.get(download_url)
+        
+        # Check if there's a download form (indication of virus scan warning)
+        if 'confirm=' in response.text:
+            # Extract the confirmation token
+            token = response.text.split('confirm=')[1].split('"')[0]
+            # Construct the confirmed URL
+            confirmed_url = f"{download_url}&confirm={token}"
+            # Get the file content
+            response = session.get(confirmed_url)
         
         # Read the CSV content
-        return pd.read_csv(StringIO(response.text))
+        content = response.content.decode('utf-8')
+        return pd.read_csv(io.StringIO(content))
 
     try:
         df = load_data()
